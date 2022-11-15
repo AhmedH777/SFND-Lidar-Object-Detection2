@@ -46,7 +46,7 @@ struct KdTree
 		}
 		else
 		{
-			int cd = depth % 2;
+			int cd = depth % 3;
 			float ptNode,pt;
 
 			if(cd == 0)
@@ -54,10 +54,15 @@ struct KdTree
 				pt = point.x;
 				ptNode = ((*node)->point.x);
 			}
-			else
+			else if(cd == 1)
 			{
 				pt = point.y;
 				ptNode = ((*node)->point.y);
+			}
+			else
+			{
+				pt = point.z;
+				ptNode = ((*node)->point.z);
 			}
 
 
@@ -88,11 +93,14 @@ struct KdTree
 			if( ( node->point.x >= (target.x - distanceTol) ) &&
 				( node->point.x <= (target.x + distanceTol) ) &&
 				( node->point.y >= (target.y - distanceTol) ) &&
-				( node->point.y <= (target.y + distanceTol) ) )
+				( node->point.y <= (target.y + distanceTol) ) &&
+				( node->point.z >= (target.z - distanceTol) ) &&
+				( node->point.z <= (target.z + distanceTol) ) )
 				{
 					float dxSq = ( (node->point.x - target.x) * (node->point.x - target.x) );
 					float dySq = ( (node->point.y - target.y) * (node->point.y - target.y) );
-					float distance = sqrt(dxSq +dySq);
+					float dzSq = ( (node->point.z - target.z) * (node->point.z - target.z) );
+					float distance = sqrt(dxSq + dySq + dzSq);
 
 					if(distance < distanceTol)
 					{
@@ -100,17 +108,22 @@ struct KdTree
 					}
 				}
 
-			int cd = depth % 2;
+			int cd = depth % 3;
 			float targetPt,pt;
 			if(cd == 0)
 			{
 				pt = node->point.x;
 				targetPt = target.x;
 			}
-			else
+			else if (cd == 1)
 			{
 				pt = node->point.y;
 				targetPt = target.y;
+			}
+			else
+			{
+				pt = node->point.z;
+				targetPt = target.z;
 			}
 
 			if( ( targetPt - distanceTol ) < pt )
